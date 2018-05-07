@@ -8,10 +8,11 @@
 using namespace std;
 using namespace cv;
 
-DataLoader::DataLoader(string path, const int num_categories, ProcessingConfiguration cfg,vector<string>  extensions): 
-path(move(path)), num_categories(num_categories), cfg(move(cfg)), allowed_extentions(std::move(extensions)), num_images(0), current_index(0)
+DataLoader::DataLoader(string i_path, const int num_categories, ProcessingConfiguration cfg,vector<string>  extensions): 
+path(move(i_path)), num_categories(num_categories), cfg(move(cfg)), allowed_extentions(std::move(extensions)), num_images(0), current_index(0)
 {
 	if (num_categories < 2) throw invalid_argument("DataLoader constructor: There must be at least 2 categories for classification");
+	if (path.back() != '/') path += '/';
 	Image::SetCfg(cfg);
 }
 
@@ -35,16 +36,16 @@ path(move(path)), num_categories(num_categories), cfg(move(cfg)), allowed_extent
  *			...
  *			imagex.jpg
  *	
- *	Filenames are irrevelant, any files with allowed extensions will be read. All images must have the same size. 
+ *	Filenames are irrelevant, any files with allowed extensions will be read. All images must have the same size. 
  */
 int DataLoader::ReadData(bool random_shuffle) {
 	vector<vector<string>> filenames;
 	vector<string> filenames_in_dir;
 	int num_files = 0;
+	cout << "Reading files" << endl;
 
 	for (int i = 0; i < num_categories; i++)
 	{
-		cerr << path + to_string(i) + "/";
 		ReadFilenames(path + to_string(i) + "/", filenames_in_dir);
 		num_files += ReadAllFromDirectory(filenames_in_dir, i);
 	}
@@ -84,7 +85,10 @@ void DataLoader::SaveFormattedData(std::string path)
 
 	shared_ptr<vector<float>> formatted_vector;
 
+	cout << "Processing data" << endl;
+
 	for (auto& img : images) {
+
 		if (cfg.pca)  formatted_vector = img->ProcesssAndFormatData(pca_vector);
 		else formatted_vector = img->ProcesssAndFormatData();
 

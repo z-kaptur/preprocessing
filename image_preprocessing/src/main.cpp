@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 		TCLAP::ValueArg<std::string> pca_type("p", "pca", "Type of pca analysis", false, "", "string");
 		TCLAP::ValueArg<std::string> pca_components("e", "components", "Max number of pca components", false, "", "int");
 		TCLAP::ValueArg<std::string> pca_variance("v", "variance", "Pca reatained variance", false, "", "double");
-		TCLAP::ValueArg<std::string> s_path("s", "save", "Save path", false, "", "string");
+		TCLAP::ValueArg<std::string> s_path("s", "save", "Save path", true, "", "string");
 
 		cmd.add(i_path);
 		cmd.add(num_labels);
@@ -65,16 +65,14 @@ int main(int argc, char** argv)
 		ProcessingConfiguration cfg(type, filter, filter_type, mean, negative, pca);
 		DataLoader data_loader(input_path, num_categories, cfg);
 		data_loader.ReadData();
-		cerr << "Read succesfully" << endl;
+		cerr << "Data was read succesfully" << endl;
 		if (save) data_loader.SaveFormattedData(save_path);
 		vector<vector<float>> test;
 		vector<int> labels;
-		cerr << test.size() << ":" << data_loader.GetNumImages() << endl;
 		DataLoader::ReadVector(save_path, test, labels);
-		cerr << test.size() << ":" << data_loader.GetNumImages() << endl;
-		cerr << labels.size() << ":" << data_loader.GetNumImages() << endl;
 		if (test.size() != data_loader.GetNumImages()) throw exception("Saving went wrong");
 		if (labels.size() != data_loader.GetNumImages()) throw exception("Saving went wrong");
+		cout << "Data was saved to a file successfully" << endl;
 	}
 	catch (TCLAP::ArgException &e)  // catch any exceptions
 	{

@@ -22,12 +22,12 @@ class DataLoader {
 public:
 	/**
 	 * @brief DataLoader constructor.
-	 * @param path path to the folder containing subfolders with categorized images
+	 * @param i_path path to the folder containing subfolders with categorized images
 	 * @param num_categories number of categories
 	 * @param cfg ProcessingConfiguration struct containing processing options
 	 * @param extensions vector of strings corresponding to allowed file extensions. Default: .JPEG, .jpg, .jpeg, .png, .bmp
 	 */
-	DataLoader(std::string path, 
+	DataLoader(std::string i_path, 
 		const int num_categories, 
 		ProcessingConfiguration cfg,
 		std::vector<std::string>  extensions = {".JPEG",".jpg",".jpeg",".png",".bmp"});
